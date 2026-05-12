@@ -1,3 +1,9 @@
+/**
+ * @file        main.cpp
+ * @author      jeannicolas gosselin and anahi mongelos toledo
+ * @date        May 12, 2026
+ * @brief       This is the main implementation file
+ */
 #include <Arduino.h>
 #include "sensors.h"
 #include "ble.h"

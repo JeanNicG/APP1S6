@@ -1,3 +1,9 @@
+/**
+ * @file        sensor.cpp
+ * @author      jeannicolas gosselin and anahi mongelos toledo
+ * @date        May 12, 2026
+ * @brief       This is the sensor implementation file
+ */
 #include "sensors.h"
 
 #define LIGHT_SENSOR_PIN 34

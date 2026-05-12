@@ -1,3 +1,11 @@
+/**
+ * @file        ble.h
+ * @author      jeannicolas gosselin and anahi mongelos toledo
+ * @date        May 12, 2026
+ * @brief       This is the BLE header file
+ * @cite        This code is based on the BLE examples provided by the ESP32 Arduino library, 
+ *              with modifications for our specific use case.
+ */
 #pragma once
 #include <BLEDevice.h>
 #include <BLEServer.h>

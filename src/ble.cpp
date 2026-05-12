@@ -1,3 +1,11 @@
+/**
+ * @file        ble.cpp
+ * @author      jeannicolas gosselin and anahi mongelos toledo
+ * @date        May 12, 2026
+ * @brief       This is the BLE implementation file
+ * @cite        This code is based on the BLE examples provided by the ESP32 Arduino library, 
+ *              with modifications for our specific use case.
+ */
 #include "ble.h"
 
 // https://www.uuidgenerator.net/
