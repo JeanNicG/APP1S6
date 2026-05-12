@@ -4,7 +4,8 @@
 #define WIND_SPEED_PIN 27
 #define WIND_DIRECTION_PIN 35
 #define RAIN_SENSOR_PIN 23 
-#define LIGHT_MAX_RAW 2300
+#define LIGHT_MAX_RAW 2350
+#define LIGHT_MAX_LUX 203
 #define DHT_PIN 16
 
 volatile int wind_pulse_count = 0;
@@ -19,15 +20,15 @@ void IRAM_ATTR rain_level_isr() {
 }
 
 void Sensors::init() {
+    analogSetPinAttenuation(LIGHT_SENSOR_PIN, ADC_11db);
     dps310PressureSensor.begin(Wire);
-    // Interrupt to count wind speed and rain level 
     attachInterrupt(digitalPinToInterrupt(WIND_SPEED_PIN), wind_speed_isr, FALLING);
     attachInterrupt(digitalPinToInterrupt(RAIN_SENSOR_PIN), rain_level_isr, FALLING);
 }
 
 int Sensors::readLightLevel() {
     int raw_light = analogRead(LIGHT_SENSOR_PIN);
-    int light = map(raw_light, 0, LIGHT_MAX_RAW, 0, 100); 
+    int light = map(raw_light, 0, LIGHT_MAX_RAW, 0, LIGHT_MAX_LUX);
     return light;
 }
 
@@ -102,12 +103,25 @@ WindSpeedDirection Sensors::readWindSpeedDirection() {
     int pulse_count = wind_pulse_count;
     wind_pulse_count = 0;
     
-    // 1 pulse = 0.67m/s
-    float wind_speed = pulse_count * 0.67;
+    // 1 pulse = 2.4Km/h
+    float wind_speed = pulse_count * 2.4;
     
     // Read wind direction
     int raw_direction = analogRead(WIND_DIRECTION_PIN);
-    int direction_deg = map(raw_direction, 0, 4095, 0, 360);
+    
+    const int adc_values[16]  = {3142, 1623, 1845, 335,  372,  263,   738,   506,   1148,  978,   2520,  2396,   3780,  3309,   3548,  2810};
+    const float angles[16]    = {0.0,  22.5, 45.0, 67.5, 90.0, 112.5, 135.0, 157.5, 180.0, 202.5, 225.0, 247.5, 270.0, 292.5, 315.0, 337.5};
+    float direction_deg = 0.0;
+    int min_diff = 4096;
+    
+    for (int i = 0; i < 16; i++) {
+        int diff = abs(raw_direction - adc_values[i]);
+        if (diff < min_diff) {
+            min_diff = diff;
+            direction_deg = angles[i];
+        }
+    }
+    
     return {wind_speed, direction_deg};
 }
 

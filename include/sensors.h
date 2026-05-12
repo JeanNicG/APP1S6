@@ -1,5 +1,6 @@
 #pragma once
 #include <Arduino.h>
+#include <math.h>
 #include <Dps310.h>
 
 struct TempHumidity {
@@ -9,7 +10,7 @@ struct TempHumidity {
 
 struct WindSpeedDirection {
     float speed;
-    int direction;
+    float direction;
 };
 
 class Sensors {
